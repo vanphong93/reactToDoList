@@ -1,16 +1,12 @@
+import "./App.css";
+import ToDoList from "./ToDOList/ToDoList";
 
-import './App.css';
-import Demo from './reactToDo/Demo'
 function App() {
-
   return (
-    <div className="App">
-<Demo/>
+    <div>
+<ToDoList></ToDoList>
     </div>
   );
 }
 
-export default App
-
-
-
+export default App;
