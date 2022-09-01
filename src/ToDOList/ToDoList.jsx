@@ -7,10 +7,20 @@ import { Dropdown } from "../Components/Dropdown";
 import { Heading3 } from "../Components/Heading";
 import { Table, Th, Thead, Tr } from "../Components/Table";
 import { TextField } from "../Components/TextField";
+import {
+  ADD,
+  CHANGE,
+  DELETE,
+  DONE,
+  EDIT,
+  TRASH,
+  UPDATE,
+} from "./Redux/actions/action";
 import { themeAll } from "./Redux/rootReducers/toDoReducer";
 class ToDoList extends Component {
   state = {
     taskName: "",
+    buttonDisabled: false,
   };
   render() {
     return (
@@ -32,6 +42,11 @@ class ToDoList extends Component {
           </Dropdown>
           <Heading3>To do list</Heading3>
           <TextField
+            onFocus={this.state.buttonDisabled?"":() => {
+              this.setState({
+                taskName: "",
+              });
+            }}
             value={this.state.taskName}
             onChange={(e) => {
               let { value } = e.target;
@@ -42,23 +57,43 @@ class ToDoList extends Component {
             label="Task name"
             className="w-50"
           />
-          <Button
-            onClick={() => {
-              let object = this.state.taskName;
-              this.props.handleAdd(object);
-            }}
-            className="ml-2"
-          >
-            <i className="fa-sharp fa-solid fa-plus"></i>
-          </Button>
-          <Button
-            onClick={() => {let object=this.state.taskName;
-              this.props.handleUpdate(this.props.taskEdit,object);
-            }}
-            className="ml-2"
-          >
-            <i className="fa-solid fa-rotate"></i>
-          </Button>
+          {this.state.buttonDisabled ? (
+            ""
+          ) : (
+            <Button
+              onClick={() => {
+                let content = this.state.taskName;
+                if (content == "") {
+                  alert("Xin nhập dữ liệu");
+                  return;
+                }
+                this.props.handleAdd(content);
+              }}
+              className="ml-2"
+            >
+              <i className="fa-sharp fa-solid fa-plus"></i>
+            </Button>
+          )}
+          {this.state.buttonDisabled ? (
+            <Button
+              onClick={() => {
+                let content = this.state.taskName;
+                if (content == "") {
+                  alert("Xin nhập dữ liệu");
+                  return;
+                }
+                this.setState({
+                  buttonDisabled: false,
+                });
+                this.props.handleUpdate(this.props.taskEdit, content);
+              }}
+              className="ml-2"
+            >
+              <i className="fa-solid fa-rotate"></i>
+            </Button>
+          ) : (
+            ""
+          )}
           <hr />
           <Heading3>Task to do</Heading3>
           <Table>
@@ -71,12 +106,9 @@ class ToDoList extends Component {
                       <Button
                         onClick={() => {
                           this.props.handleEdit(item);
-                          // this.setState(
-                          //   {
-                          //     taskName: this.props.taskEdit,
-                          //   },
-                          //   console.log("taskName", this.state.taskName)
-                          // );
+                          this.setState({
+                            buttonDisabled: true,
+                          });
                         }}
                         className="mx-1"
                       >
@@ -152,48 +184,48 @@ let mapDispatchToProps = (dispatch) => {
   return {
     changeTheme: (value) => {
       dispatch({
-        type: "change",
+        type: CHANGE,
         payload: value,
       });
     },
-    handleAdd: (object) => {
+    handleAdd: (value) => {
       dispatch({
-        type: "add",
-        payload: object,
+        type: ADD,
+        payload: value,
       });
     },
     handleDelete: (value) => {
       dispatch({
-        type: "delete",
+        type: DELETE,
         payload: value,
       });
     },
     handleDid: (value) => {
       dispatch({
-        type: "done",
+        type: DONE,
         payload: value,
       });
     },
 
     handleTrash: (value) => {
       dispatch({
-        type: "trash",
+        type: TRASH,
         payload: value,
       });
     },
     handleEdit: (value) => {
       dispatch({
-        type: "edit",
+        type: EDIT,
         payload: value,
       });
     },
-    handleUpdate:(value,object) => { 
+    handleUpdate: (value, content) => {
       dispatch({
-        type:"update",
-        payload:value,
-        object:object,
-      })
-     }
+        type: UPDATE,
+        payload: value,
+        object: content,
+      });
+    },
   };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(ToDoList);

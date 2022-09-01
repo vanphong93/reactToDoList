@@ -1,9 +1,8 @@
-import { DarkTheme } from "../../../StyledComponent/ToDoListDarkTheme";
-import { LightTheme } from "../../../StyledComponent/ToDoListLightTheme";
-import { PrimaryTheme } from "../../../StyledComponent/ToDoListPrimaryTheme";
 
+import { DarkTheme, LightTheme, PrimaryTheme } from '../../../StyledComponent/Theme'
+import { ADD, CHANGE, DELETE, DONE, EDIT, TRASH, UPDATE } from '../actions/action';
 export let themeAll = [
-  { id: 1, name: "Primary Theme", value: PrimaryTheme },
+  { id: 1, name: "Primary Theme", value: PrimaryTheme},
   { id: 2, name: "Light Theme", value: LightTheme },
   { id: 3, name: "Dark Theme", value: DarkTheme },
 ];
@@ -15,30 +14,29 @@ const initialState = {
   taskEdit: "",
 };
 
-export let toDoReducer = (state = initialState, { type, payload,object}) => {
+export let toDoReducer = (state = initialState, { type, payload, object }) => {
   switch (type) {
-    case "change":
+    case CHANGE:
       let newTheme = themeAll.find((item) => {
         return item.id == payload;
       });
       return { ...state, themeToDo: newTheme.value };
-    case "add": {
+    case ADD: {
       let cloneTask = [...state.taskList];
       let object = {
         id: Date.now(),
         name: payload,
-        // done: false,
       };
       cloneTask.push(object);
       return { ...state, taskList: cloneTask };
     }
-    case "delete": {
+    case DELETE: {
       let cloneTask = state.taskList.filter((item) => {
         return item.id != payload;
       });
       return { ...state, taskList: cloneTask };
     }
-    case "done": {
+    case DONE: {
       let cloneTask = state.taskList.filter((item) => {
         return item.id != payload.id;
       });
@@ -46,22 +44,22 @@ export let toDoReducer = (state = initialState, { type, payload,object}) => {
       cloneTaskDid.push(payload);
       return { ...state, taskList: cloneTask, taskDid: cloneTaskDid };
     }
-    case "trash": {
+    case TRASH: {
       let cloneTaskDid = state.taskDid.filter((item) => {
         return item.id != payload;
       });
       return { ...state, taskDid: cloneTaskDid };
     }
-    case "edit":
+    case EDIT:
       return { ...state, taskEdit: payload };
-    case "update":
-     { let cloneTaskList = [...state.taskList];
+    case UPDATE: {
+      let cloneTaskList = [...state.taskList];
       let index = cloneTaskList.findIndex((item) => {
         return item.id == payload.id;
       });
-      cloneTaskList[index].name=object;
-      state.taskList=cloneTaskList;
-      return{...state}}
+      cloneTaskList[index].name = object;
+      return { ...state,taskList:cloneTaskList };
+    }
     default:
       return state;
   }
