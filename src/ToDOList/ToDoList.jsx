@@ -7,16 +7,8 @@ import { Dropdown } from "../Components/Dropdown";
 import { Heading3 } from "../Components/Heading";
 import { Table, Th, Thead, Tr } from "../Components/Table";
 import { TextField } from "../Components/TextField";
-import {
-  ADD,
-  CHANGE,
-  DELETE,
-  DONE,
-  EDIT,
-  TRASH,
-  UPDATE,
-} from "./Redux/actions/action";
 import { themeAll } from "./Redux/rootReducers/toDoReducer";
+import { mapDispatchToProps } from "./Redux/type/type";
 class ToDoList extends Component {
   state = {
     taskName: "",
@@ -42,11 +34,15 @@ class ToDoList extends Component {
           </Dropdown>
           <Heading3>To do list</Heading3>
           <TextField
-            onFocus={this.state.buttonDisabled?"":() => {
-              this.setState({
-                taskName: "",
-              });
-            }}
+            onFocus={
+              this.state.buttonDisabled
+                ? ""
+                : () => {
+                    this.setState({
+                      taskName: "",
+                    });
+                  }
+            }
             value={this.state.taskName}
             onChange={(e) => {
               let { value } = e.target;
@@ -63,7 +59,7 @@ class ToDoList extends Component {
             <Button
               onClick={() => {
                 let content = this.state.taskName;
-                if (content == "") {
+                if (content === "") {
                   alert("Xin nhập dữ liệu");
                   return;
                 }
@@ -78,7 +74,7 @@ class ToDoList extends Component {
             <Button
               onClick={() => {
                 let content = this.state.taskName;
-                if (content == "") {
+                if (content === "") {
                   alert("Xin nhập dữ liệu");
                   return;
                 }
@@ -180,52 +176,5 @@ let mapStateToProps = (state) => {
     taskEdit: state.toDoReducer.taskEdit,
   };
 };
-let mapDispatchToProps = (dispatch) => {
-  return {
-    changeTheme: (value) => {
-      dispatch({
-        type: CHANGE,
-        payload: value,
-      });
-    },
-    handleAdd: (value) => {
-      dispatch({
-        type: ADD,
-        payload: value,
-      });
-    },
-    handleDelete: (value) => {
-      dispatch({
-        type: DELETE,
-        payload: value,
-      });
-    },
-    handleDid: (value) => {
-      dispatch({
-        type: DONE,
-        payload: value,
-      });
-    },
 
-    handleTrash: (value) => {
-      dispatch({
-        type: TRASH,
-        payload: value,
-      });
-    },
-    handleEdit: (value) => {
-      dispatch({
-        type: EDIT,
-        payload: value,
-      });
-    },
-    handleUpdate: (value, content) => {
-      dispatch({
-        type: UPDATE,
-        payload: value,
-        object: content,
-      });
-    },
-  };
-};
 export default connect(mapStateToProps, mapDispatchToProps)(ToDoList);
