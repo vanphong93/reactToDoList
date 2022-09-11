@@ -8,7 +8,15 @@ import { Heading3 } from "../Components/Heading";
 import { Table, Th, Thead, Tr } from "../Components/Table";
 import { TextField } from "../Components/TextField";
 import { themeAll } from "./Redux/rootReducers/toDoReducer";
-import { mapDispatchToProps } from "./Redux/type/type";
+import {
+  changeTheme,
+  handleAdd,
+  handleDelete,
+  handleDid,
+  handleEdit,
+  handleTrash,
+  handleUpdate,
+} from "./Redux/actions/action";
 class ToDoList extends Component {
   state = {
     taskName: "",
@@ -21,7 +29,7 @@ class ToDoList extends Component {
           <Dropdown
             onChange={(e) => {
               let { value } = e.target;
-              this.props.changeTheme(value);
+              this.props.dispatch(changeTheme(value));
             }}
           >
             {themeAll.map((item, i) => {
@@ -63,7 +71,7 @@ class ToDoList extends Component {
                   alert("Xin nhập dữ liệu");
                   return;
                 }
-                this.props.handleAdd(content);
+                this.props.dispatch(handleAdd(content));
               }}
               className="ml-2"
             >
@@ -81,7 +89,7 @@ class ToDoList extends Component {
                 this.setState({
                   buttonDisabled: false,
                 });
-                this.props.handleUpdate(this.props.taskEdit, content);
+                this.props.dispatch(handleUpdate(this.props.taskEdit, content));
               }}
               className="ml-2"
             >
@@ -101,7 +109,7 @@ class ToDoList extends Component {
                     <Th className="text-right">
                       <Button
                         onClick={() => {
-                          this.props.handleEdit(item);
+                          this.props.dispatch(handleEdit(item));
                           this.setState({
                             buttonDisabled: true,
                           });
@@ -112,7 +120,7 @@ class ToDoList extends Component {
                       </Button>
                       <Button
                         onClick={() => {
-                          this.props.handleDid(item);
+                          this.props.dispatch(handleDid(item));
                         }}
                         className="mx-1"
                       >
@@ -120,7 +128,7 @@ class ToDoList extends Component {
                       </Button>
                       <Button
                         onClick={() => {
-                          this.props.handleDelete(item.id);
+                          this.props.dispatch(handleDelete(item.id));
                         }}
                         className="mx-1"
                       >
@@ -143,7 +151,7 @@ class ToDoList extends Component {
                       <Button>
                         <i
                           onClick={() => {
-                            this.props.handleTrash(item.id);
+                            this.props.dispatch(handleTrash(item.id));
                           }}
                           className="fa-solid fa-trash"
                         ></i>
@@ -168,7 +176,6 @@ class ToDoList extends Component {
 }
 
 let mapStateToProps = (state) => {
-  console.log("taskEdit", state.toDoReducer.taskEdit.name);
   return {
     themeToDo: state.toDoReducer.themeToDo,
     taskList: state.toDoReducer.taskList,
@@ -177,4 +184,4 @@ let mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(ToDoList);
+export default connect(mapStateToProps)(ToDoList);

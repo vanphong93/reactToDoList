@@ -1,6 +1,6 @@
 
 import { DarkTheme, LightTheme, PrimaryTheme } from '../../../StyledComponent/Theme'
-import { ADD, CHANGE, DELETE, DONE, EDIT, TRASH, UPDATE } from '../actions/action';
+import { ADD, CHANGE, DELETE, DONE, EDIT, TRASH, UPDATE } from '../type/type';
 export let themeAll = [
   { id: 1, name: "Primary Theme", value: PrimaryTheme},
   { id: 2, name: "Light Theme", value: LightTheme },
